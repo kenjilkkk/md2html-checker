@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Arquivos Markdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+    h1 {
+      color: #333;
+    }
+    ul {
+      padding-left: 1.5rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+    .filename {
+      font-weight: bold;
+    }
+    .date {
+      color: #777;
+      font-size: 0.9em;
+      margin-left: 0.5em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Arquivos Markdown Enviados</h1>
+  <ul id="file-list"></ul>
+
+  <script>
+    fetch('/list-json') // endpoint que retorna o meta.json
+      .then(response => response.json())
+      .then(data => {
+        const list = document.getElementById('file-list');
+
+        data.forEach((file, index) => {
+          if (file.originalname.endsWith('.md')) {
+            const li = document.createElement('li');
+            const filename = document.createElement('span');
+						const createA = document.createElement('a');
+            filename.className = 'filename';
+            filename.textContent = file.originalname;
+
+						const createAText = document.createTextNode(filename.textContent);
+
+						createA.setAttribute('href', `render/${index}`);
+						createA.appendChild(createAText);
+
+            const date = document.createElement('span');
+            date.className = 'date';
+            const d = new Date(file.uploadTime);
+            date.textContent = `(enviado em ${d.toLocaleDateString()} às ${d.toLocaleTimeString()})`;
+
+            li.appendChild(createA);
+            li.appendChild(date);
+            list.appendChild(li);
+          }
+        });
+      })
+      .catch(err => {
+        document.body.innerHTML += '<p>Erro ao carregar a lista.</p>';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>

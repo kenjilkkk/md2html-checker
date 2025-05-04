@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enviar Arquivo Markdown</title>
+</head>
+<body>
+  <h1>Upload de Arquivo Markdown</h1>
+  <form action="/upload" method="POST" enctype="multipart/form-data">
+    <label for="file">Selecione o arquivo .md:</label><br />
+    <input type="file" name="file" id="file" accept=".md" required /><br /><br />
+    <button type="submit">Enviar</button>
+  </form>
+	<p>Para listar os arquivos enviados</p>
+	<a href="/list">
+		<button>listar</button>
+	</a>
+</body>
+</html>
+

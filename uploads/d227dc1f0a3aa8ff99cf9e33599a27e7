@@ -1,0 +1,44 @@
+---
+title: "Construção de um Servidor Proxy com Cache em Node.js"
+date: 2025-05-01
+tags: ["Node.js", "Proxy", "CLI", "Web Development", "Projetos Pessoais"]
+draft: false
+---
+
+Com o objetivo de aprofundar meus conhecimentos em redes, HTTP e desenvolvimento de ferramentas em linha de comando, desenvolvi o **caching-proxy**, um servidor proxy com cache local em Node.js.
+
+O projeto permite:
+- Redirecionar requisições para um servidor de origem.
+- Armazenar respostas em cache local.
+- Retornar respostas do cache em chamadas repetidas.
+- Adicionar cabeçalhos HTTP personalizados para indicar a origem da resposta (`X-Cache: HIT` ou `MISS`).
+
+**Tecnologias utilizadas:**
+- **Node.js** para lógica principal e manipulação de arquivos.
+- **Express.js** para criação do servidor HTTP.
+- **Commander.js** para parsing de argumentos via CLI.
+- **Axios** para fazer requisições ao servidor de origem.
+- **File System (fs)** para persistência de cache local.
+
+**Principais aprendizados:**
+- Implementação de um **proxy reverso simples com cache**.
+- Uso de TTL (Time to Live) para controlar validade do cache.
+- Construção de **CLI tools personalizadas**.
+- Organização do cache por domínio e rota para evitar conflitos entre URLs diferentes.
+- Adição dinâmica de cabeçalhos HTTP baseados na lógica de cache.
+
+**Melhorias planejadas:**
+- Suporte a mais métodos HTTP além de GET (ex: POST, PUT).
+- Validação do cache via ETag ou Last-Modified.
+- Interface web para gerenciamento visual do cache.
+- Suporte a múltiplas origens simultaneamente com isolamento seguro.
+
+**Exemplo de uso via terminal:**
+
+```bash
+# Iniciar o servidor proxy
+node index.js --port 3000 --origin http://dummyjson.com --ttl 60
+```
+**Meu Link para o repositório:**
+[Repositório](https://github.com/kenjilkkk/caching-proxy)
+
