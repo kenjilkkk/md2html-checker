@@ -31,9 +31,12 @@ app.use('/check-grammar', checkRoute)
 
 app.post('/upload', upload.single('file'), saveJson);
 
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, 'public', 'html', 'index.html'));
+})
 
 app.get('/list', (req, res) => {
-	res.sendFile(path.join(__dirname, 'public', 'list.html'));	
+	res.sendFile(path.join(__dirname, 'public', 'html', 'list.html'));	
 
 })
 
@@ -42,7 +45,9 @@ app.get('/list-json', (req, res) => {
 	res.json(data);
 })
 
-
+app.get('/check-grammar', (req, res) => {
+	res.sendFile(path.join(__dirname, 'public', 'html', 'check-grammar.html'));
+})
 
 
 app.listen(PORT, () => {

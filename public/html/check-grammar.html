@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Grammar Check</title>
+		<style>
+  	.item-list {
+    	white-space: pre-line; /* Exibe quebras de linha e espaços */
+  	}
+		</style>
+
+	</head>
+	<body>
+		<h1 id="msg"></h1>
+		<ul id="lista"></ul>
+		
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const idx = localStorage.getItem('selectIndx');	
+				try{
+					fetch(`/check-grammar/${idx}`)
+						.then(response => response.json())
+						.then(data => {
+							if(data.length === 0)
+							{
+								console.log(`Erro data ${data}`);
+								const msg = document.getElementById('msg');
+								msg.textContent = "Sem erros";
+							}
+							const list = document.getElementById('lista');
+
+							data.forEach((item) => {
+								const li = document.createElement('li');
+								li.className = 'item-list';
+								li.textContent = `${item.bad}\n${item.description.en}`;
+							
+								list.appendChild(li);
+										
+							})
+			
+					})
+				}catch(e)
+				{
+					console.log(e);
+
+				}
+			})
+		</script>
+	</body>
+</html>
