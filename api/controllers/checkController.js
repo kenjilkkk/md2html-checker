@@ -1,80 +1,47 @@
 const fs = require('fs');
-const textgears = require('textgears-api');
 const removeMd = require('remove-markdown');
-
+const spell = require('spell-checker-js');
 const { getJson } = require('../../utils/saveGetJson');
-
-const MAX_RECURSION = 5;
+const { join } = require('path');
 
 const checkController = async (req, res) => {
 	const index = req.params.index;
 
-	const meta = getJson(); //modificar o get json para retornar somente o objeto do index correspondente.
-	
-	const md = fs.readFileSync(meta[index].path, {encoding: 'utf8'});
-	const plain = removeMd(md);
+	try
+	{
+		const meta = getJson(); //modificar o get json para retornar somente o objeto do index correspondente.
+		const md = fs.readFileSync(meta[index].path, {encoding: 'utf8'});
+		const plain = removeMd(md);
 
-	const textgearsApi = textgears(process.env.API_KEY_TEXTGEAR, {language: 'pt-BR', ai: true});
-	//checar por extrangerismo.
+		spell.load('dictionary/ptBr.txt');
+		const check = spell.check(plain);
 
-	const textgear = async(text, depth = 0) => {
-		let wordsToChange = [];
-
-		if(depth > MAX_RECURSION)
+		console.log(check);
+		if(check.length === 0)
 		{
-			console.warn("Recursao maxima atingida")
-
+			res.json([]); // sem erros
 		}
 
-		try
-		{
-			const data = await textgearsApi.checkGrammar(text);
+		let erros = [];
 
-			if (!data || !data.response || !Array.isArray(data.response.errors)) {
-				console.warn("Resposta inesperada:", data);
-				return [];
-			}
+		check.forEach((item) => {
 
-			console.log(data.response.errors[0].bad)
-			for(const error of data.response.errors)
+			if(isNaN(parseFloat(item)))
 			{
-				if(error.description.en.toLowerCase().includes("estrangeirismo"))
-				{
+				erros.push({'bad': item,
+							'description': 'Spell miss'
+			});
 
-					wordsToChange.push(error.bad);
-				}
 			}
-			if(wordsToChange.length > 0)
-			{
+		})
 
-				const changedPlain = subWord(text, wordsToChange);
-				return await textgear(changedPlain, depth + 1);
-
-			}else
-			{
-				return data.response.errors;
-			}
-
-		}catch(e)
-		{
-			console.log(e);
-			return [];
-		}
-
-
-			
+		res.json(erros);
+	}catch(e)
+	{
+		console.log(e);
+		res.json(e);
 	}
 
-	const respon = await textgear(plain);
-	res.json(respon)
-}
-
-const subWord = (mdPlain, words) => {
-	let newText = mdPlain;
-	words.forEach(word => {
-		newText = newText.replace(word, ' ');
-	});
-	return newText;
 }
 
 module.exports =  { checkController }

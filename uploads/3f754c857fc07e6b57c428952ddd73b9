@@ -1,0 +1,17 @@
+# Welcom to My Projeckt
+
+This is a simpel aplication writen in Python. It alows you to manage your to-do list very esily and effectivly.
+
+## Featurs
+
+- Add new tasks to you'r list
+- Delette tasks when there done
+- View all your curent task
+- Save and lod your tasks from disk
+
+## Instalation
+
+To install the aplication, you must have Python 3 instaled.
+
+```bash
+pip instal todo-ap

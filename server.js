@@ -2,8 +2,6 @@ require('dotenv').config();
 
 const express = require('express');
 const multer = require('multer');
-const marked = require('marked');
-const {lint} = require('markdownlint/async');
 const path = require('path');
 const { saveJson, getJson, hashing} = require('./utils/saveGetJson');
 
@@ -37,7 +35,6 @@ app.get('/', (req, res) => {
 
 app.get('/list', (req, res) => {
 	res.sendFile(path.join(__dirname, 'public', 'html', 'list.html'));	
-
 })
 
 app.get('/list-json', (req, res) => {
@@ -51,23 +48,6 @@ app.get('/check-grammar', (req, res) => {
 
 
 app.listen(PORT, () => {
-
 	console.log(`servidor rodando na porta: ${PORT}`);
-
 })
 
-
-/*
-function fileFilter (req, file, cb) {
-	console.log(typeof file.path);
-	const hashFile = hashing(file.path);
-	const data = getJson();
-
-	if(data.some(item => item.hashValue === hashFile))
-	{
-		cb(null, false);
-
-	}
-  cb(null, true)
-
-}*/

@@ -86,6 +86,6 @@ const hashing = (toHashFile) => {
 	return hashDigest;
 }
 
-module.exports = {saveJson, getJson, hashing};
+module.exports = {saveJson, getJson};
 
 
